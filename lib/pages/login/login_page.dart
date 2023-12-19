@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:LuxCal/utils/theme.dart';
-import 'package:LuxCal/widgets/custom/model.dart';
-import 'package:LuxCal/pages/login/login_model.dart';
+import 'package:koala/providers/theme_provider.dart';
+import 'package:koala/utils/theme.dart';
+import 'package:koala/widgets/custom/model.dart';
+import 'package:koala/pages/login/login_model.dart';
+import 'package:provider/provider.dart';
 
 import '../../utils/screen_sizes.dart';
 import '../../utils/utils.dart';
-import '../../widgets/custom/banner.dart';
 import '../../widgets/custom/button.dart';
 import '../../widgets/custom/quarter_circle.dart';
 import '../../widgets/custom/ring.dart';
@@ -38,107 +39,42 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Container(
-        height: ScreenInfo(context).screenHeight,
-        width: ScreenInfo(context).screenWidth,
-        child: Stack(children: [
-          BannerWidget(
-            title: "LuxCal",
-            backGroundColor: AppColors.bannerColor,
-            ringColor: AppColors.bannerLightColor,
-            height: ScreenInfo(context).screenHeight * 0.15,
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-                top: ScreenInfo(context).screenHeight * 0.15,
-                right: 20,
-                left: 20),
-            child: Container(
-              alignment: Alignment.center,
-              child: loginForm(),
-            ),
-          ),
-        ]),
+      body: SafeArea(
+        child: Container(
+          height: ScreenInfo(context).screenHeight,
+          width: ScreenInfo(context).screenWidth,
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                    padding: EdgeInsets.only(top: 80),
+                    child: Text("Kroniker Offical App for Lols and Absurdity")),
+                Padding(
+                    padding: EdgeInsets.only(bottom: 80), child: Text("KOALA")),
+                ElevatedButton(
+                    onPressed: () {
+                      themeProvider.toggleTheme();
+                    },
+                    child: Text("")),
+                Padding(
+                  padding: EdgeInsets.only(right: 20, left: 20, bottom: 80),
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: loginButton(),
+                  ),
+                ),
+              ]),
+        ),
       ),
     );
   }
 
-  Widget loginForm() {
-    return Form(
-      key: _model.formKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Flexible(child: Container()),
-          CustomTextField(
-            textField: TextField(
-              controller: _model.emailTextController,
-              textCapitalization: TextCapitalization.none,
-              obscureText: false,
-              decoration: InputDecoration(
-                labelText: 'Email',
-                labelStyle: AppTypography.textfieldHintText,
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                  borderSide: BorderSide.none,
-                ),
-                fillColor: AppColors.cardColor,
-              ),
-              style: AppTypography.textfieldText,
-              keyboardType: TextInputType.emailAddress,
-            ),
-            validator: _model.emailTextControllerValidator,
-          ),
-          Padding(
-            padding: EdgeInsetsDirectional.only(top: 50),
-            child: CustomTextField(
-              textField: TextField(
-                controller: _model.passwordTextController,
-                textCapitalization: TextCapitalization.none,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  labelStyle: AppTypography.textfieldHintText,
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide.none,
-                  ),
-                  fillColor: AppColors.cardColor,
-                ),
-                style: AppTypography.textfieldText,
-                keyboardType: TextInputType.emailAddress,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 80),
-            child: CustomMainButton(
-              buttonText: "Sign In",
-              height: 48,
-              onPressed: () async {
-                await signIn(context, _model);
-                navigateToHomeWidget(context);
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 25),
-            child: InkWell(
-                onTap: () {
-                  navigateToRegisterWidget(context);
-                },
-                child: Text(
-                  "New here? click here to register",
-                  style: AppTypography.textfieldText.copyWith(fontSize: 16),
-                )),
-          ),
-          Flexible(child: Container()),
-        ],
-      ),
+  Widget loginButton() {
+    return CustomMainButton(
+      buttonText: "Login With Google",
     );
   }
 }

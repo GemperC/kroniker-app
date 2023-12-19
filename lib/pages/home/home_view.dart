@@ -1,4 +1,4 @@
-import 'package:LuxCal/utils/theme.dart';
+import 'package:koala/utils/theme.dart';
 import 'package:flutter/material.dart';
 
 class HomeWidget extends StatefulWidget {

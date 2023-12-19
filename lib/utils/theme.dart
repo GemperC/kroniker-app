@@ -16,6 +16,35 @@ class AppColors {
   static const Color textFieldTextColor = Color(0xFF646464);
   static const Color cardTextColor = Color(0xFF646464);
   static const Color cardTitleTextColor = Color(0xFF646464);
+
+  // Light Theme Color Scheme
+  static final ColorScheme lightColorScheme = ColorScheme.light(
+    primary: bannerColor,
+    background: backgroundColor,
+  );
+
+  // Dark Theme Color Scheme
+  static final ColorScheme darkColorScheme = ColorScheme.dark(
+    background: Color(0xFF08080),
+  );
+
+  // Light Theme
+  static final ThemeData LightTheme = ThemeData(
+    colorScheme: lightColorScheme,
+    scaffoldBackgroundColor: lightColorScheme.background,
+    textTheme: TextTheme(
+      bodyText1: AppTypography.bannerTitle,
+    ),
+  );
+
+  // Dark Theme
+  static final ThemeData DarkTheme = ThemeData(
+    colorScheme: darkColorScheme,
+    scaffoldBackgroundColor: darkColorScheme.background,
+    textTheme: TextTheme(
+      bodyText1: AppTypography.bannerTitle.copyWith(color: Colors.white),
+    ),
+  );
 }
 
 class AppTypography {

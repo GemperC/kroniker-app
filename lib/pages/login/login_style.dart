@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:LuxCal/utils/theme.dart';
+import 'package:koala/utils/theme.dart';
 
 final _defaultFontFamily = 'Open Sans';
 final _appNameFont = 'Orbitron';

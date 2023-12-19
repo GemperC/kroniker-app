@@ -1,4 +1,4 @@
-name: LuxCal
+name: koala
 description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -70,6 +70,7 @@ dependencies:
   calendar_view: ^1.0.4
   intl: ^0.18.0
   image_picker: ^1.0.4
+  google_sign_in: ^6.2.1
 
 dev_dependencies:
   flutter_test:

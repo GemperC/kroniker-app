@@ -1,8 +1,8 @@
-import 'package:LuxCal/backend/records/news_record.dart';
+import 'package:koala/backend/records/news_record.dart';
 import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:LuxCal/backend/records/user_record.dart';
+import 'package:koala/backend/records/user_record.dart';
 import '../../utils/latlng.dart';
 import 'event_record.dart';
 import 'user_record.dart';

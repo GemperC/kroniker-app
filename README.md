@@ -1,4 +1,4 @@
-# LuxCal
+# koala
 
 A new Flutter project.
 

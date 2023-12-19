@@ -1,6 +1,6 @@
 {
-    "name": "LuxCal",
-    "short_name": "LuxCal",
+    "name": "koala",
+    "short_name": "koala",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

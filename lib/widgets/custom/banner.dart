@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:LuxCal/widgets/custom/ring.dart';
+import 'package:koala/widgets/custom/ring.dart';
 
 import '../../utils/screen_sizes.dart';
 import '../../utils/theme.dart';
@@ -11,15 +11,13 @@ class BannerWidget extends StatelessWidget {
   final double height;
   final bool showBackButton;
 
-
-
   BannerWidget({
     required this.title,
     required this.backGroundColor,
     required this.ringColor,
     required this.height,
     this.showBackButton = false,
-  }) ;
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,4 @@
-package com.luxcal.luxcalapp
+package com.koala.koalaapp
 
 import io.flutter.embedding.android.FlutterActivity
 
