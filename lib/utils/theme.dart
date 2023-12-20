@@ -5,80 +5,91 @@ class AppColors {
   // static final AppTheme colors = ColorPalette._();
   AppColors._();
 
-  static const Color bannerColor = Color(0xFF795ad9);
-  static const Color bannerLightColor = Color(0xFF7f60df);
-  static const Color bannerTextTitleColor = Colors.white;
-  static const Color cardColor = Colors.white;
-  static const Color backgroundColor = Color(0xFFf7f7f7);
-  static const Color buttonColor = Color(0xFF7d54cd);
-  static const Color buttonTextColor = Colors.white;
-  static const Color textFieldHintTextColor = Color(0xFF646464);
-  static const Color textFieldTextColor = Color(0xFF646464);
-  static const Color cardTextColor = Color(0xFF646464);
-  static const Color cardTitleTextColor = Color(0xFF646464);
-
   // Light Theme Color Scheme
   static final ColorScheme lightColorScheme = ColorScheme.light(
-    primary: bannerColor,
-    background: backgroundColor,
+    background: Colors.white,
+    primary: Colors.blue,
+    onPrimary: Colors.white,
   );
 
   // Dark Theme Color Scheme
   static final ColorScheme darkColorScheme = ColorScheme.dark(
-    background: Color(0xFF08080),
+    background: Color.fromARGB(15, 0, 0, 0),
+    primary: Colors.blue,
+    onPrimary: Colors.white,
+    secondary: Color.fromARGB(15, 32, 32, 32),
+    surfaceTint: Color.fromARGB(15, 59, 59, 59),
   );
 
   // Light Theme
   static final ThemeData LightTheme = ThemeData(
     colorScheme: lightColorScheme,
     scaffoldBackgroundColor: lightColorScheme.background,
-    textTheme: TextTheme(
-      bodyText1: AppTypography.bannerTitle,
-    ),
   );
 
   // Dark Theme
   static final ThemeData DarkTheme = ThemeData(
     colorScheme: darkColorScheme,
     scaffoldBackgroundColor: darkColorScheme.background,
-    textTheme: TextTheme(
-      bodyText1: AppTypography.bannerTitle.copyWith(color: Colors.white),
-    ),
   );
 }
 
 class AppTypography {
   static const _defaultFontFamily = 'Open Sans';
-  static const _appNameFont = 'Orbitron';
 
   AppTypography._();
 
-  // AppTypography(this.theme);
-
-  static TextStyle get bannerTitle => GoogleFonts.getFont(
+  static TextStyle dialogTitle(BuildContext context) => GoogleFonts.getFont(
         _defaultFontFamily,
-        color: AppColors.bannerTextTitleColor,
+        color: Theme.of(context)
+            .colorScheme
+            .onBackground, // Adapted to current theme
+        fontWeight: FontWeight.w600,
+        fontSize: 25.0,
+      );
+
+  static TextStyle bannerTitle(BuildContext context) => GoogleFonts.getFont(
+        _defaultFontFamily,
+        color: Theme.of(context)
+            .colorScheme
+            .onBackground, // Adapted to current theme
+        fontWeight: FontWeight.w600,
+        fontSize: 30.0,
+      );
+  static TextStyle appTitle(BuildContext context) => GoogleFonts.getFont(
+        _defaultFontFamily,
+        color: Theme.of(context)
+            .colorScheme
+            .onBackground, // Adapted to current theme
+        fontWeight: FontWeight.w900,
+        fontSize: 60.0,
+      );
+
+  static TextStyle textfieldText(BuildContext context) => GoogleFonts.getFont(
+        _defaultFontFamily,
+        color: Theme.of(context).colorScheme.onSurface,
         fontWeight: FontWeight.w600,
         fontSize: 22.0,
       );
 
-  static TextStyle get textfieldText => GoogleFonts.getFont(
+  static TextStyle textfieldHintText(BuildContext context) =>
+      GoogleFonts.getFont(
         _defaultFontFamily,
-        color: const Color(0xFF646464),
-        fontWeight: FontWeight.w600,
-        fontSize: 22.0,
-      );
-  static TextStyle get textfieldHintText => GoogleFonts.getFont(
-        _defaultFontFamily,
-        color: const Color(0xFF646464),
+        color: Theme.of(context).hintColor,
         fontWeight: FontWeight.w600,
         fontSize: 22.0,
       );
 
-  static TextStyle get buttonText => GoogleFonts.getFont(
+  static TextStyle buttonText(BuildContext context) => GoogleFonts.getFont(
         _defaultFontFamily,
-        color: AppColors.buttonTextColor,
+        color: Theme.of(context).colorScheme.onPrimary,
         fontWeight: FontWeight.w600,
         fontSize: 22.0,
+      );
+  static TextStyle buttonTextS(BuildContext context) => GoogleFonts.getFont(
+        _defaultFontFamily,
+        color: Theme.of(context).colorScheme.onPrimary,
+        fontWeight: FontWeight.w600,
+        fontSize: 14.0,
       );
 }

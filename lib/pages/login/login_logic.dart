@@ -18,7 +18,7 @@ void navigateToHomeWidget(context) {
   );
 }
 
-Future<void> signIn(context, LoginModel _model) async {
+Future<void> signIn(context) async {
   try {
     final user = await signInWithGoogle(context);
     if (user == null) {
@@ -59,4 +59,10 @@ Future<void> signIn(context, LoginModel _model) async {
         Utils.showSnackBar(e.message);
     }
   }
+  await Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => HomeWidget(),
+    ),
+  );
 }

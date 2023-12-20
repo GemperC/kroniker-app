@@ -9,16 +9,10 @@ abstract class UserRecord implements Built<UserRecord, UserRecordBuilder> {
   static Serializer<UserRecord> get serializer => _$userRecordSerializer;
 
   String? get email;
-  DateTime? get birth;
   String? get uid;
-  String? get nickname;
-  String? get nicknameColor;
 
   @BuiltValueField(wireName: 'created_time')
   DateTime? get createdTime;
-
-  @BuiltValueField(wireName: 'phone_number')
-  String? get phoneNumber;
 
   @BuiltValueField(wireName: 'name')
   String? get displayName;
@@ -44,8 +38,6 @@ Map<String, dynamic> createUsersRecordData({
   String? email,
   String? uid,
   DateTime? createdTime,
-  DateTime? birth,
-  String? phoneNumber,
   String? displayName,
   // DocumentReference? sets,
 }) {
@@ -56,8 +48,6 @@ Map<String, dynamic> createUsersRecordData({
         ..email = email
         ..uid = uid
         ..createdTime = createdTime
-        ..birth = birth
-        ..phoneNumber = phoneNumber
         ..displayName = displayName,
     ),
   );

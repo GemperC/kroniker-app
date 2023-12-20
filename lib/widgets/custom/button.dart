@@ -12,18 +12,20 @@ class CustomMainButton extends StatelessWidget {
     this.onDisabledPressed,
     this.radios,
     this.textSize,
-    this.buttonColor = const Color(0xFF7d54cd),
-    this.buttonTextColor = Colors.white,
+    this.textColor,
     this.active = true,
+    this.padding,
     required this.buttonText,
-  });
+  }) : super(key: key);
+
+  double? padding;
 
   double? width;
   double? height;
   double? radios;
   double? textSize;
-  Color buttonColor;
-  Color buttonTextColor;
+
+  Color? textColor;
 
   bool active;
   // final Future<dynamic> Function()? onPressed;
@@ -34,23 +36,31 @@ class CustomMainButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: active ? onPressed : onDisabledPressed ?? () {},
-      style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.zero,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(radios ?? 20))),
-      child: Ink(
-        decoration: BoxDecoration(
-            color: buttonColor,
-            borderRadius: BorderRadius.circular(radios ?? 20)),
-        child: Container(
-          width: width,
-          height: height,
-          alignment: Alignment.center,
-          child: Text(
-            buttonText,
-            style: AppTypography.buttonText.copyWith(color: buttonTextColor),
+    return IntrinsicWidth(
+      child: ElevatedButton(
+        onPressed: active ? onPressed : onDisabledPressed ?? () {},
+        style: ElevatedButton.styleFrom(
+            // backgroundColor: Theme.of(context).colorScheme.primary,
+            padding: EdgeInsets.zero,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(radios ?? 20))),
+        child: Ink(
+          decoration:
+              BoxDecoration(borderRadius: BorderRadius.circular(radios ?? 20)),
+          child: Padding(
+            padding: width == null
+                ? EdgeInsets.only(left: 8.0, right: 8)
+                : EdgeInsets.zero,
+            child: Container(
+              width: width,
+              height: height,
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: padding ?? 0),
+                child:
+                    Text(buttonText, style: AppTypography.buttonTextS(context)),
+              ),
+            ),
           ),
         ),
       ),

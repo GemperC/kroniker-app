@@ -91,7 +91,6 @@ Future maybeCreateUser(User user) async {
     email: user.email,
     displayName: user.displayName,
     uid: user.uid,
-    phoneNumber: user.phoneNumber,
     createdTime: getCurrentTimestamp,
   );
 

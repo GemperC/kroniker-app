@@ -1,12 +1,12 @@
-import 'package:koala/backend/records/news_record.dart';
 import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:koala/backend/records/user_record.dart';
 import '../../utils/latlng.dart';
-import 'event_record.dart';
+import 'game_record.dart';
 import 'user_record.dart';
 import 'package:built_collection/src/list.dart';
+
 part 'serializers.g.dart';
 
 const kDocumentReferenceField = 'Document__Reference__Field';
@@ -14,8 +14,7 @@ const kDocumentReferenceField = 'Document__Reference__Field';
 @SerializersFor(
   const [
     UserRecord,
-    EventRecord,
-    NewsRecord,
+    GameRecord,
   ],
 )
 final Serializers serializers = (_$serializers.toBuilder()
@@ -37,13 +36,19 @@ class DateTimeSerializer implements PrimitiveSerializer<DateTime> {
   @override
   Object serialize(Serializers serializers, DateTime dateTime,
       {FullType specifiedType = FullType.unspecified}) {
-    return dateTime;
+    return Timestamp.fromDate(dateTime);
   }
 
   @override
   DateTime deserialize(Serializers serializers, Object serialized,
-          {FullType specifiedType = FullType.unspecified}) =>
-      serialized as DateTime;
+      {FullType specifiedType = FullType.unspecified}) {
+    if (serialized is Timestamp) {
+      return serialized.toDate();
+    } else {
+      throw ArgumentError(
+          'Cannot deserialize DateTime from ${serialized.runtimeType}');
+    }
+  }
 }
 
 DateTime get getCurrentTimestamp => DateTime.now();

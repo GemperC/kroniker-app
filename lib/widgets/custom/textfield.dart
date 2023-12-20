@@ -12,12 +12,12 @@ class CustomTextField extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.0),
         boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 8,
-            offset: Offset(5, 5),
-          ),
+          // BoxShadow(
+          //   color: Colors.grey.withOpacity(0.5),
+          //   spreadRadius: 2,
+          //   blurRadius: 8,
+          //   offset: Offset(5, 5),
+          // ),
         ],
       ),
       child: TextFormField(

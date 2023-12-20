@@ -1,26 +1,43 @@
 {
   "project_info": {
-    "project_number": "160053690034",
-    "project_id": "koala-75a29",
-    "storage_bucket": "koala-75a29.appspot.com"
+    "project_number": "217234056195",
+    "project_id": "kroniker-app",
+    "storage_bucket": "kroniker-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:160053690034:android:b7b3aaeb3fc29bcd39d3ab",
+        "mobilesdk_app_id": "1:217234056195:android:ef0df87187db5632fe9a36",
         "android_client_info": {
           "package_name": "com.koala.koalaapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "217234056195-iauk0ol7fhk4jmsahb8s6o6qddqfn10s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyB09uw_Mp-oSbmNb9PNNglssPtAVYcyGf0"
+          "current_key": "AIzaSyC_cyHqJFOuBOXTADxmhxUy0wxEAvV4_SE"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "217234056195-iauk0ol7fhk4jmsahb8s6o6qddqfn10s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "217234056195-a9939mbcrutibckhc7m204iljoovthdv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.koala.koalaapp"
+              }
+            }
+          ]
         }
       }
     }
