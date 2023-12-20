@@ -49,7 +49,7 @@ void createNewGame(String gameTitle) async {
       gameMasterEmail: gameMasterEmail,
     );
 
-    await GameRecord.collection.add(gameData);
+    GameRecord().addNewGame(gameData);
     print("Game record created successfully.");
   } catch (e) {
     print("Error creating game record: $e");

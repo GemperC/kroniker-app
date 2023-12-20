@@ -10,6 +10,8 @@ abstract class GameRecord implements Built<GameRecord, GameRecordBuilder> {
   static Serializer<GameRecord> get serializer => _$gameRecordSerializer;
 
   String? get gameTitle;
+  String? get id;
+
   DateTime? get created_date;
   String? get bannerImageUrl;
   String? get description;
@@ -78,4 +80,17 @@ abstract class GameRecord implements Built<GameRecord, GameRecordBuilder> {
 
     return firestoreData;
   }
+
+  void addNewGame(Map<String, dynamic> gameData) async {
+  try {
+    DocumentReference docRef = GameRecord.collection.doc();
+
+    gameData['id'] = docRef.id;
+
+    await docRef.set(gameData);
+    print('New game added with ID: ${docRef.id}');
+  } catch (e) {
+    print('Error adding game: $e');
+  }
+}
 }

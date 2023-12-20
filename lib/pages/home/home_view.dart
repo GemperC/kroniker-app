@@ -77,11 +77,51 @@ class _HomeWidgetState extends State<HomeWidget> {
         onTap: () {
           // Handle card tap
         },
+        onLongPress: () {
+          _showDeleteGameDialog(context, game);
+        },
         leading: game.bannerImageUrl != null
             ? Image.network(game.bannerImageUrl!, fit: BoxFit.cover)
             : Container(color: Colors.blue, width: 50, height: 50),
         title: Text(game.gameTitle ?? 'Unknown Game'),
       ),
     );
+  }
+
+  void _showDeleteGameDialog(BuildContext context, GameRecord game) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Delete Game"),
+          content: Text("Do you want to delete this game?"),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text("Confirm"),
+              onPressed: () {
+                _deleteGame(game);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _deleteGame(GameRecord game) {
+    // Assuming game has a unique identifier to reference Firestore document
+    FirebaseFirestore.instance
+        .collection('games')
+        .doc(game.id)
+        .delete()
+        .then((_) => print('Game deleted'))
+        .catchError((error) => print('Delete failed: $error'));
   }
 }

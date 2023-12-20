@@ -26,6 +26,13 @@ class _$GameRecordSerializer implements StructuredSerializer<GameRecord> {
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.id;
+    if (value != null) {
+      result
+        ..add('id')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     value = object.created_date;
     if (value != null) {
       result
@@ -124,6 +131,10 @@ class _$GameRecordSerializer implements StructuredSerializer<GameRecord> {
           result.gameTitle = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
         case 'created_date':
           result.created_date = serializers.deserialize(value,
               specifiedType: const FullType(DateTime)) as DateTime?;
@@ -186,6 +197,8 @@ class _$GameRecord extends GameRecord {
   @override
   final String? gameTitle;
   @override
+  final String? id;
+  @override
   final DateTime? created_date;
   @override
   final String? bannerImageUrl;
@@ -211,6 +224,7 @@ class _$GameRecord extends GameRecord {
 
   _$GameRecord._(
       {this.gameTitle,
+      this.id,
       this.created_date,
       this.bannerImageUrl,
       this.description,
@@ -235,6 +249,7 @@ class _$GameRecord extends GameRecord {
     if (identical(other, this)) return true;
     return other is GameRecord &&
         gameTitle == other.gameTitle &&
+        id == other.id &&
         created_date == other.created_date &&
         bannerImageUrl == other.bannerImageUrl &&
         description == other.description &&
@@ -251,6 +266,7 @@ class _$GameRecord extends GameRecord {
   int get hashCode {
     var _$hash = 0;
     _$hash = $jc(_$hash, gameTitle.hashCode);
+    _$hash = $jc(_$hash, id.hashCode);
     _$hash = $jc(_$hash, created_date.hashCode);
     _$hash = $jc(_$hash, bannerImageUrl.hashCode);
     _$hash = $jc(_$hash, description.hashCode);
@@ -269,6 +285,7 @@ class _$GameRecord extends GameRecord {
   String toString() {
     return (newBuiltValueToStringHelper(r'GameRecord')
           ..add('gameTitle', gameTitle)
+          ..add('id', id)
           ..add('created_date', created_date)
           ..add('bannerImageUrl', bannerImageUrl)
           ..add('description', description)
@@ -289,6 +306,10 @@ class GameRecordBuilder implements Builder<GameRecord, GameRecordBuilder> {
   String? _gameTitle;
   String? get gameTitle => _$this._gameTitle;
   set gameTitle(String? gameTitle) => _$this._gameTitle = gameTitle;
+
+  String? _id;
+  String? get id => _$this._id;
+  set id(String? id) => _$this._id = id;
 
   DateTime? _created_date;
   DateTime? get created_date => _$this._created_date;
@@ -345,6 +366,7 @@ class GameRecordBuilder implements Builder<GameRecord, GameRecordBuilder> {
     final $v = _$v;
     if ($v != null) {
       _gameTitle = $v.gameTitle;
+      _id = $v.id;
       _created_date = $v.created_date;
       _bannerImageUrl = $v.bannerImageUrl;
       _description = $v.description;
@@ -380,6 +402,7 @@ class GameRecordBuilder implements Builder<GameRecord, GameRecordBuilder> {
       _$result = _$v ??
           new _$GameRecord._(
               gameTitle: gameTitle,
+              id: id,
               created_date: created_date,
               bannerImageUrl: bannerImageUrl,
               description: description,
