@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:koala/backend/records/game_record.dart';
 import 'package:koala/backend/records/serializers.dart';
-import 'package:koala/pages/game/game_page.dart';
+import 'package:koala/pages/game/game_view.dart';
 import 'package:koala/pages/home/home_logic.dart';
 import 'package:koala/providers/game_provider.dart';
 import 'package:koala/utils/screen_sizes.dart';
