@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:koala/providers/dice_provider.dart';
+import 'package:koala/providers/game_provider.dart';
 import 'package:koala/providers/theme_provider.dart';
 import 'package:koala/utils/theme.dart';
 import 'package:koala/utils/utils.dart';
@@ -25,6 +27,8 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => DiceProvider()),
+        ChangeNotifierProvider(create: (context) => GameProvider()),
       ],
       child: MyApp(),
     ),
@@ -51,6 +55,7 @@ class _MyAppState extends State<MyApp> {
     userStream = loginFirebaseUserStream()
       ..listen((user) => initialUser ?? setState(() => initialUser = user));
     storage.writeIfNull('theme', ThemeMode.dark.toString());
+    storage.writeIfNull('narrative_dice', true);
   }
 
   @override

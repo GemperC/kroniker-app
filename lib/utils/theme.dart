@@ -9,12 +9,12 @@ class AppColors {
   static final ColorScheme lightColorScheme = ColorScheme.light(
     background: Colors.white,
     primary: Colors.blue,
-    onPrimary: Colors.white,
+    onPrimary: Colors.black,
   );
 
   // Dark Theme Color Scheme
   static final ColorScheme darkColorScheme = ColorScheme.dark(
-    background: Color.fromARGB(15, 0, 0, 0),
+    background: Color.fromARGB(255, 0, 0, 0),
     primary: Colors.blue,
     onPrimary: Colors.white,
     secondary: Color.fromARGB(15, 32, 32, 32),

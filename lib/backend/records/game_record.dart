@@ -82,15 +82,15 @@ abstract class GameRecord implements Built<GameRecord, GameRecordBuilder> {
   }
 
   void addNewGame(Map<String, dynamic> gameData) async {
-  try {
-    DocumentReference docRef = GameRecord.collection.doc();
+    try {
+      DocumentReference docRef = GameRecord.collection.doc();
 
-    gameData['id'] = docRef.id;
+      gameData['id'] = docRef.id;
 
-    await docRef.set(gameData);
-    print('New game added with ID: ${docRef.id}');
-  } catch (e) {
-    print('Error adding game: $e');
+      await docRef.set(gameData);
+      print('New game added with ID: ${docRef.id}');
+    } catch (e) {
+      print('Error adding game: $e');
+    }
   }
-}
 }

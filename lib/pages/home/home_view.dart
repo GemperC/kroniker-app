@@ -2,10 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:koala/backend/records/game_record.dart';
 import 'package:koala/backend/records/serializers.dart';
+import 'package:koala/pages/game/game_page.dart';
 import 'package:koala/pages/home/home_logic.dart';
+import 'package:koala/providers/game_provider.dart';
+import 'package:koala/utils/screen_sizes.dart';
 import 'package:koala/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:koala/widgets/custom/button.dart';
+import 'package:provider/provider.dart';
 
 class HomeWidget extends StatefulWidget {
   const HomeWidget({Key? key});
@@ -19,8 +23,40 @@ class _HomeWidgetState extends State<HomeWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: Column(
+          child: Stack(
         children: [
+          StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('games')
+                .orderBy('created_date', descending: true)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              if (!snapshot.hasData) {
+                return Center(child: Text("No games available."));
+              }
+
+              List<GameRecord> games = snapshot.data!.docs
+                  .map((doc) => serializers.deserializeWith(
+                      GameRecord.serializer, doc.data()) as GameRecord)
+                  .toList();
+
+              return ListView.builder(
+                itemCount: games.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: index == 0
+                        ? const EdgeInsets.only(top: 80.0)
+                        : const EdgeInsets.all(0),
+                    child: _buildGameCard(games[index]),
+                  );
+                },
+              );
+            },
+          ),
           Padding(
               padding: EdgeInsets.only(left: 30, right: 20, top: 20),
               child: Row(
@@ -37,55 +73,42 @@ class _HomeWidgetState extends State<HomeWidget> {
                   ),
                 ],
               )),
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('games')
-                  .orderBy('created_date', descending: true)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                }
-
-                if (!snapshot.hasData) {
-                  return Center(child: Text("No games available."));
-                }
-
-                List<GameRecord> games = snapshot.data!.docs
-                    .map((doc) => serializers.deserializeWith(
-                        GameRecord.serializer, doc.data()) as GameRecord)
-                    .toList();
-
-                return ListView.builder(
-                  itemCount: games.length,
-                  itemBuilder: (context, index) {
-                    return _buildGameCard(games[index]);
-                  },
-                );
-              },
-            ),
-          ),
         ],
       )),
     );
   }
 
   Widget _buildGameCard(GameRecord game) {
+    final gameProvider = Provider.of<GameProvider>(context);
+
     return Card(
-      child: ListTile(
-        onTap: () {
-          // Handle card tap
-        },
-        onLongPress: () {
-          _showDeleteGameDialog(context, game);
-        },
-        leading: game.bannerImageUrl != null
-            ? Image.network(game.bannerImageUrl!, fit: BoxFit.cover)
-            : Container(color: Colors.blue, width: 50, height: 50),
-        title: Text(game.gameTitle ?? 'Unknown Game'),
-      ),
-    );
+        margin: EdgeInsets.only(left: 20, right: 20, top: 25),
+        shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Container(
+          height: 150,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GameScreen(),
+                  ));
+              gameProvider.toggleGame(game);
+            },
+            onLongPress: () {
+              _showDeleteGameDialog(context, game);
+            },
+            child: Container(
+              height: 150,
+              child: Stack(children: [
+                game.bannerImageUrl != null
+                    ? Image.network(game.bannerImageUrl!, fit: BoxFit.cover)
+                    : Container(color: Colors.blue, width: 100, height: 100),
+                Text(game.gameTitle ?? 'Unknown Game')
+              ]),
+            ),
+          ),
+        ));
   }
 
   void _showDeleteGameDialog(BuildContext context, GameRecord game) {

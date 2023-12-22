@@ -49,7 +49,7 @@ class CustomMainButton extends StatelessWidget {
               BoxDecoration(borderRadius: BorderRadius.circular(radios ?? 20)),
           child: Padding(
             padding: width == null
-                ? EdgeInsets.only(left: 8.0, right: 8)
+                ? EdgeInsets.only(left: 12, right: 12)
                 : EdgeInsets.zero,
             child: Container(
               width: width,

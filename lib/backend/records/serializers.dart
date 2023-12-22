@@ -44,6 +44,8 @@ class DateTimeSerializer implements PrimitiveSerializer<DateTime> {
       {FullType specifiedType = FullType.unspecified}) {
     if (serialized is Timestamp) {
       return serialized.toDate();
+    } else if (serialized is DateTime) {
+      return serialized; // Directly return the DateTime if it's already a DateTime
     } else {
       throw ArgumentError(
           'Cannot deserialize DateTime from ${serialized.runtimeType}');
