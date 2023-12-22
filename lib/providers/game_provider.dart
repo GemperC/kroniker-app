@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:koala/backend/auth/auth_util.dart';
@@ -41,6 +42,13 @@ class GameProvider extends ChangeNotifier {
   void updateGameTitle(String newGameTitle) {
     if (_gameRecord != null) {
       _gameRecord = _gameRecord!.rebuild((b) => b..gameTitle = newGameTitle);
+      notifyListeners();
+    }
+  }
+
+  void updateGameCharacters(List<DocumentReference> characerList) {
+    if (_gameRecord != null) {
+      _gameRecord = _gameRecord!.rebuild((b) => b..characters = characerList);
       notifyListeners();
     }
   }

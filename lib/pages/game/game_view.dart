@@ -5,7 +5,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:koala/backend/auth/auth_util.dart';
+import 'package:koala/backend/records/character_record.dart';
 import 'package:koala/backend/records/game_record.dart';
+import 'package:koala/backend/records/serializers.dart';
 import 'package:koala/providers/game_provider.dart';
 import 'package:koala/widgets/custom/button.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +21,39 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
+  List<CharacterRecord> characters = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    List<CharacterRecord> characters = [];
+  }
+
+  void _fetchCharacters() async {
+    final gameProvider = Provider.of<GameProvider>(context, listen: false);
+    final gameId = gameProvider.gameRecord.id;
+
+    FirebaseFirestore.instance
+        .collection('games/$gameId/characters')
+        .get()
+        .then((snapshot) {
+      setState(() {
+        characters = snapshot.docs
+            .map((doc) => serializers.deserializeWith(
+                CharacterRecord.serializer, doc.data()))
+            .toList() as List<CharacterRecord>;
+      });
+    });
+  }
+
+  Widget _buildCharacterList() {
+    return Column(
+      children: characters
+          .map((character) => CharacterCard(character: character))
+          .toList(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final gameProvider = Provider.of<GameProvider>(context);
@@ -106,17 +141,14 @@ class _GameScreenState extends State<GameScreen> {
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ),
-                    ...List.generate(3,
-                        (index) => CharacterCard()), // Generate character cards
-                    ListTile(
-                      title: Text('GM KIT'),
-                      trailing: Checkbox(
-                        value: true, // Bind to state variable
-                        onChanged: (bool? value) {
-                          // Handle change
-                        },
-                      ),
-                    ),
+                    _buildCharacterList(), // Generate character cards
+
+                    isGM
+                        ? ElevatedButton(
+                            onPressed: () => _showGMKitDialog(context),
+                            child: Text('Open GM Kit'),
+                          )
+                        : Container(),
                   ],
                 ),
               ),
@@ -134,6 +166,77 @@ class _GameScreenState extends State<GameScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  void _showGMKitDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("GM Kit"),
+          content: ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+
+              _showAddCharacterDialog(context);
+            },
+            child: Text('Add Character'),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showAddCharacterDialog(BuildContext context) {
+    TextEditingController nameController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Add Character"),
+          content: TextField(
+            controller: nameController,
+            decoration: InputDecoration(hintText: "Enter character name"),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text("Add"),
+              onPressed: () async {
+                String name = nameController.text.trim();
+                if (name.isNotEmpty) {
+                  // Create character data
+                  Map<String, dynamic> characterData = {
+                    'name': name,
+                    'createdDate':
+                        DateTime.now(), // Add other fields as necessary
+                  };
+
+                  // Add character to Firestore
+                  await FirebaseFirestore.instance
+                      .collection(
+                          'games/${Provider.of<GameProvider>(context, listen: false).gameRecord.id}/characters')
+                      .add(characterData);
+
+                  // Optionally, show a success message
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Character added successfully')),
+                  );
+
+                  Navigator.of(context).pop(); // Close the dialog
+                }
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -313,16 +416,21 @@ class _GameScreenState extends State<GameScreen> {
 }
 
 class CharacterCard extends StatelessWidget {
-  const CharacterCard({Key? key}) : super(key: key);
+  final CharacterRecord character; // Add this line to accept a CharacterRecord
+
+  const CharacterCard({Key? key, required this.character})
+      : super(key: key); // Update constructor
 
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.all(8.0),
       child: ListTile(
-        title: Text('Character Name'), // Bind to character name
+        title: Text(
+            character.name ?? 'Unknown Character'), // Use character data here
         onTap: () {
           // Handle character tap
+          // You can use character data here as well
         },
       ),
     );

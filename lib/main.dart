@@ -5,6 +5,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:koala/providers/dice_provider.dart';
 import 'package:koala/providers/game_provider.dart';
 import 'package:koala/providers/theme_provider.dart';
+import 'package:koala/providers/character_provider.dart';
+
 import 'package:koala/utils/theme.dart';
 import 'package:koala/utils/utils.dart';
 import 'package:koala/pages/home/home_view.dart';
@@ -29,6 +31,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
         ChangeNotifierProvider(create: (context) => DiceProvider()),
         ChangeNotifierProvider(create: (context) => GameProvider()),
+        ChangeNotifierProvider(create: (context) => CharacterProvider()),
       ],
       child: MyApp(),
     ),
