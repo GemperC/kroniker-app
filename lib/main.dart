@@ -72,7 +72,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         scaffoldMessengerKey: Utils.messengerKey,
         home: (currentUser != null && currentUser!.loggedIn)
-            ? HomeWidget()
+            ? HomeScreen()
             : LoginWidget());
   }
 }

@@ -4,6 +4,7 @@ import 'package:koala/backend/records/game_record.dart';
 import 'package:koala/backend/records/serializers.dart';
 import 'package:koala/pages/game/game_view.dart';
 import 'package:koala/pages/home/home_logic.dart';
+import 'package:koala/pages/home/widgets/game_card_widget.dart';
 import 'package:koala/providers/game_provider.dart';
 import 'package:koala/utils/screen_sizes.dart';
 import 'package:koala/utils/theme.dart';
@@ -11,14 +12,14 @@ import 'package:flutter/material.dart';
 import 'package:koala/widgets/custom/button.dart';
 import 'package:provider/provider.dart';
 
-class HomeWidget extends StatefulWidget {
-  const HomeWidget({Key? key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key});
 
   @override
-  State<HomeWidget> createState() => _HomeWidgetState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeWidgetState extends State<HomeWidget> {
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,100 +52,34 @@ class _HomeWidgetState extends State<HomeWidget> {
                     padding: index == 0
                         ? const EdgeInsets.only(top: 80.0)
                         : const EdgeInsets.all(0),
-                    child: _buildGameCard(games[index]),
+                    child: buildGameCard(context, games[index]),
                   );
                 },
               );
             },
           ),
-          Padding(
-              padding: EdgeInsets.only(left: 30, right: 20, top: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    onTap: () => onSettingsTap(context),
-                    child: Icon(FontAwesomeIcons.gear),
-                  ),
-                  CustomMainButton(
-                    onPressed: () => onCreateGameTap(context),
-                    height: 30,
-                    buttonText: "Create Game",
-                  ),
-                ],
-              )),
+          topBar(),
         ],
       )),
     );
   }
 
-  Widget _buildGameCard(GameRecord game) {
-    final gameProvider = Provider.of<GameProvider>(context);
-
-    return Card(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 25),
-        shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        child: Container(
-          height: 150,
-          child: InkWell(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => GameScreen(),
-                  ));
-              gameProvider.toggleGame(game);
-            },
-            onLongPress: () {
-              _showDeleteGameDialog(context, game);
-            },
-            child: Container(
-              height: 150,
-              child: Stack(children: [
-                game.bannerImageUrl != null
-                    ? Image.network(game.bannerImageUrl!, fit: BoxFit.cover)
-                    : Container(color: Colors.blue, width: 100, height: 100),
-                Text(game.gameTitle ?? 'Unknown Game')
-              ]),
+  Widget topBar() {
+    return Padding(
+        padding: EdgeInsets.only(left: 30, right: 20, top: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            InkWell(
+              onTap: () => onSettingsTap(context),
+              child: Icon(FontAwesomeIcons.gear),
             ),
-          ),
-        ));
-  }
-
-  void _showDeleteGameDialog(BuildContext context, GameRecord game) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Delete Game"),
-          content: Text("Do you want to delete this game?"),
-          actions: <Widget>[
-            TextButton(
-              child: Text("Cancel"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text("Confirm"),
-              onPressed: () {
-                _deleteGame(game);
-                Navigator.of(context).pop();
-              },
+            CustomMainButton(
+              onPressed: () => onCreateGameTap(context),
+              height: 30,
+              buttonText: "Create Game",
             ),
           ],
-        );
-      },
-    );
-  }
-
-  void _deleteGame(GameRecord game) {
-    // Assuming game has a unique identifier to reference Firestore document
-    FirebaseFirestore.instance
-        .collection('games')
-        .doc(game.id)
-        .delete()
-        .then((_) => print('Game deleted'))
-        .catchError((error) => print('Delete failed: $error'));
+        ));
   }
 }

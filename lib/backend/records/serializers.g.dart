@@ -7,6 +7,7 @@ part of 'serializers.dart';
 // **************************************************************************
 
 Serializers _$serializers = (new Serializers().toBuilder()
+      ..add(CharacterRecord.serializer)
       ..add(GameRecord.serializer)
       ..add(UserRecord.serializer)
       ..addBuilderFactory(

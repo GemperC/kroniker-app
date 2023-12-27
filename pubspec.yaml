@@ -69,6 +69,7 @@ dependencies:
   intl: ^0.18.0
   image_picker: ^1.0.5
   google_sign_in: ^6.2.1
+  stroke_text: ^0.0.2
 
 dev_dependencies:
   flutter_test:

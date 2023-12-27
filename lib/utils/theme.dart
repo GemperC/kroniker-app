@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:stroke_text/stroke_text.dart';
 
 class AppColors {
   // static final AppTheme colors = ColorPalette._();
@@ -38,6 +39,33 @@ class AppTypography {
   static const _defaultFontFamily = 'Open Sans';
 
   AppTypography._();
+
+  static TextStyle floatingButtonText(BuildContext context) => GoogleFonts.getFont(
+        _defaultFontFamily,
+        color: Theme.of(context)
+            .colorScheme
+            .onBackground, // Adapted to current theme
+        fontWeight: FontWeight.w800,
+        fontSize: 16.0,
+      );
+
+  static TextStyle title(BuildContext context) => GoogleFonts.getFont(
+        _defaultFontFamily,
+        color: Theme.of(context)
+            .colorScheme
+            .onBackground, // Adapted to current theme
+        fontWeight: FontWeight.w600,
+        fontSize: 25.0,
+      );
+
+  static TextStyle gameCardText(BuildContext context) =>
+      GoogleFonts.getFont(_defaultFontFamily,
+          color: Theme.of(context)
+              .colorScheme
+              .onBackground, // Adapted to current theme
+          fontWeight: FontWeight.w600,
+          fontSize: 22.0,
+          letterSpacing: 1.8);
 
   static TextStyle dialogTitle(BuildContext context) => GoogleFonts.getFont(
         _defaultFontFamily,

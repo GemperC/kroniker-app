@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:koala/backend/auth/auth_util.dart';
 import 'package:koala/backend/auth/google_auth.dart';
 import 'package:koala/backend/records/game_record.dart';
+import 'package:koala/pages/home/widgets/home_dialogs.dart';
 import 'package:koala/pages/login/login_page.dart';
 import 'package:koala/providers/dice_provider.dart';
 import 'package:koala/providers/theme_provider.dart';
@@ -12,6 +13,7 @@ import 'package:koala/utils/theme.dart';
 import 'package:koala/widgets/custom/button.dart';
 import 'package:koala/widgets/custom/textfield.dart';
 import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void onCreateGameTap(context) {
   final gameNameController = TextEditingController();
@@ -64,60 +66,18 @@ void createNewGame(String gameTitle) async {
   }
 }
 
-void onSettingsTap(context) {
-  final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-  final diceProvider = Provider.of<DiceProvider>(context, listen: false);
-
-  showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              "The why is this a dialog but here is\nsome settings dialog",
-              style: AppTypography.dialogTitle(context),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 10),
-            CustomMainButton(
-              buttonText:
-                  Provider.of<DiceProvider>(context, listen: true).narrativeDice
-                      ? "Manual Dice"
-                      : "Narrative Dice",
-              onPressed: () {
-                diceProvider.toggleDiceMode();
-              },
-            ),
-            themeProvider.themeMode == ThemeMode.dark
-                ? CustomMainButton(
-                    buttonText: "Angelic Theme",
-                    onPressed: () {
-                      themeProvider.toggleTheme();
-                    },
-                  )
-                : CustomMainButton(
-                    buttonText: "Underdark Theme",
-                    onPressed: () {
-                      themeProvider.toggleTheme();
-                    },
-                  ),
-            CustomMainButton(
-              buttonText: "Get me outta here NOW",
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LoginWidget(),
-                    ),
-                    (route) => false);
-              },
-            ),
-          ],
-        ),
-      );
-    },
-  );
+void deleteGame(GameRecord game) {
+  // Assuming game has a unique identifier to reference Firestore document
+  FirebaseFirestore.instance
+      .collection('games')
+      .doc(game.id)
+      .delete()
+      .then((_) => print('Game deleted'))
+      .catchError((error) => print('Delete failed: $error'));
 }
+
+void onSettingsTap(context) {
+  showSettingsDialog(context);
+}
+
+

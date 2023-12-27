@@ -1,6 +1,7 @@
 import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:koala/backend/records/character_record.dart';
 import 'package:koala/backend/records/user_record.dart';
 import '../../utils/latlng.dart';
 import 'game_record.dart';
@@ -15,6 +16,7 @@ const kDocumentReferenceField = 'Document__Reference__Field';
   const [
     UserRecord,
     GameRecord,
+    CharacterRecord,
   ],
 )
 final Serializers serializers = (_$serializers.toBuilder()

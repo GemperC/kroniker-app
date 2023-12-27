@@ -12,7 +12,7 @@ void navigateToHomeWidget(context) {
   Navigator.pushAndRemoveUntil(
     context,
     MaterialPageRoute(
-      builder: (context) => HomeWidget(),
+      builder: (context) => HomeScreen(),
     ),
     (r) => false,
   );
@@ -62,7 +62,7 @@ Future<void> signIn(context) async {
   await Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => HomeWidget(),
+      builder: (context) => HomeScreen(),
     ),
   );
 }

@@ -46,10 +46,10 @@ class GameProvider extends ChangeNotifier {
     }
   }
 
-  void updateGameCharacters(List<DocumentReference> characerList) {
-    if (_gameRecord != null) {
-      _gameRecord = _gameRecord!.rebuild((b) => b..characters = characerList);
-      notifyListeners();
-    }
-  }
+  // void updateGameCharacters(List<DocumentReference> characerList) {
+  //   if (_gameRecord != null) {
+  //     _gameRecord = _gameRecord!.rebuild((b) => b..characters = characerList);
+  //     notifyListeners();
+  //   }
+  // }
 }
