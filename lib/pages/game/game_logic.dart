@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:koala/backend/records/game_record.dart';
@@ -28,7 +29,7 @@ Future<void> uploadImage(BuildContext context, GameRecord game) async {
     // Create a reference to the Firebase Storage location
     final storageRef = FirebaseStorage.instance.ref();
     final gameImagesRef =
-        storageRef.child('games/${game.id}/${Path.basename(file.path)}');
+        storageRef.child('games/${game.id}/banner/${Path.basename(file.path)}');
 
     // Upload the file
     await gameImagesRef.putFile(file);
@@ -79,4 +80,52 @@ void updateGameDescription(
     Provider.of<GameProvider>(context, listen: false)
         .updateGameDescription(newDescription);
   } catch (e) {}
+}
+
+void updateGameSetting(
+    BuildContext context, GameRecord game, String newSetting) async {
+  try {
+    await FirebaseFirestore.instance.collection('games').doc(game.id).update({
+      'setting': newSetting,
+    });
+
+    Provider.of<GameProvider>(context, listen: false)
+        .updateGameSetting(newSetting);
+  } catch (e) {}
+}
+
+void uploadPDF(BuildContext context, String gameId) async {
+  FilePickerResult? result = await FilePicker.platform.pickFiles(
+    type: FileType.custom,
+    allowedExtensions: ['pdf'],
+  );
+
+  if (result != null) {
+    File file = File(result.files.single.path!);
+    String fileName = 'rules/rules.pdf'; // Customize as needed
+
+    try {
+      await FirebaseStorage.instance
+          .ref('games/$gameId/$fileName')
+          .putFile(file);
+
+      // Get download URL and update Firestore document
+      String downloadURL = await FirebaseStorage.instance
+          .ref('games/$gameId/$fileName')
+          .getDownloadURL();
+
+      await FirebaseFirestore.instance
+          .collection('games')
+          .doc(gameId)
+          .update({'rulesUrl': downloadURL});
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('PDF uploaded successfully')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to upload PDF')),
+      );
+    }
+  }
 }

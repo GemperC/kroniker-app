@@ -11,6 +11,9 @@ import 'package:koala/backend/records/serializers.dart';
 import 'package:koala/pages/game/game_logic.dart';
 import 'package:koala/pages/game/widgets/character_card.dart';
 import 'package:koala/pages/game/widgets/game_dialogs.dart';
+import 'package:koala/pages/game/widgets/rules_dialog.dart';
+import 'package:koala/pages/game/widgets/setting_dialog.dart';
+import 'package:koala/pages/home/widgets/home_dialogs.dart';
 import 'package:koala/providers/game_provider.dart';
 import 'package:koala/utils/theme.dart';
 import 'package:koala/widgets/custom/button.dart';
@@ -24,11 +27,9 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
-  List<CharacterRecord> characters = [];
   @override
   void initState() {
     super.initState();
-    List<CharacterRecord> characters = [];
   }
 
   @override
@@ -39,142 +40,140 @@ class _GameScreenState extends State<GameScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 60.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: InkWell(
-                        onLongPress: () {
-                          if (isGM) {
-                            showEditTitleDialog(
-                                context, gameProvider.gameRecord);
-                          }
-                        },
-                        child: Text(
-                          gameProvider.gameRecord.gameTitle == null ||
-                                  gameProvider.gameRecord.gameTitle! == ""
-                              ? 'No TItle provided'
-                              : gameProvider.gameRecord.gameTitle!,
-                          style: AppTypography.title(context),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 200, // Placeholder height for banner image
-                      child: InkWell(
-                        onLongPress: () {
-                          if (isGM) {
-                            uploadImage(context, gameRecord);
-                          }
-                        },
-                        child: gameRecord.bannerImageUrl != null
-                            ? Image.network(gameRecord.bannerImageUrl!)
-                            : Placeholder(), // Replace with actual image widget
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(top: 8.0, right: 20, left: 20),
-                      child: InkWell(
-                        onLongPress: () {
-                          if (isGM) {
-                            showEditDescriptionDialog(
-                                context, gameProvider.gameRecord);
-                          }
-                        },
-                        child: Text(
-                          gameProvider.gameRecord.description ??
-                              'No description provided',
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ),
-                      ),
-                    ),
-                    ButtonBar(
-                      alignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            // Handle setting
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 60.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onLongPress: () {
+                            if (isGM) {
+                              showEditTitleDialog(
+                                  context, gameProvider.gameRecord);
+                            }
                           },
-                          child: Text('Setting'),
+                          child: Text(
+                            gameProvider.gameRecord.gameTitle == null ||
+                                    gameProvider.gameRecord.gameTitle! == ""
+                                ? 'No TItle provided'
+                                : gameProvider.gameRecord.gameTitle!,
+                            style: AppTypography.title(context),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                        ElevatedButton(
-                          onPressed: () {
-                            // Handle rules
-                          },
-                          child: Text('Rules'),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20),
-                      child: Text(
-                        'Characters',
-                        style: Theme.of(context).textTheme.headline6,
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 80.0),
-                      child: StreamBuilder<QuerySnapshot>(
-                        stream: FirebaseFirestore.instance
-                            .collection('games')
-                            .doc(gameRecord.id)
-                            .collection("characters")
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return Center(child: CircularProgressIndicator());
-                          }
-
-                          if (!snapshot.hasData) {
-                            return Center(child: Text("No games available."));
-                          }
-
-                          List<CharacterRecord> characters = snapshot.data!.docs
-                              .map((doc) => serializers.deserializeWith(
-                                      CharacterRecord.serializer, doc.data())
-                                  as CharacterRecord)
-                              .toList();
-
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: characters.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: index == 0
-                                    ? const EdgeInsets.only(top: 80.0)
-                                    : const EdgeInsets.all(0),
-                                child: buildCharacterCard(
-                                    context, characters[index]),
-                              );
+                      Container(
+                        height: 200, // Placeholder height for banner image
+                        child: InkWell(
+                          onLongPress: () {
+                            if (isGM) {
+                              uploadImage(context, gameRecord);
+                            }
+                          },
+                          child: gameRecord.bannerImageUrl != null
+                              ? Image.network(gameRecord.bannerImageUrl!)
+                              : Placeholder(), // Replace with actual image widget
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 8.0, right: 20, left: 20),
+                        child: InkWell(
+                          onLongPress: () {
+                            if (isGM) {
+                              showEditDescriptionDialog(
+                                  context, gameProvider.gameRecord);
+                            }
+                          },
+                          child: Text(
+                            gameProvider.gameRecord.description ??
+                                'No description provided',
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                        ),
+                      ),
+                      ButtonBar(
+                        alignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              showGameSettingDialog(context, gameRecord, isGM);
                             },
-                          );
-                        },
+                            child: Text('Setting'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              showRulesDialog(context, gameRecord, isGM);
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //       builder: (context) => GameRulesPDFScreen(
+                              //           gameRecord: gameRecord, isGM: isGM),
+                              //     ));
+                            },
+                            child: Text('Rules'),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Text(
+                          'Characters',
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 80.0),
+                        child: StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('games')
+                              .doc(gameRecord.id)
+                              .collection("characters")
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Center(child: CircularProgressIndicator());
+                            }
+
+                            if (!snapshot.hasData) {
+                              return Center(child: Text("No games available."));
+                            }
+
+                            List<CharacterRecord> characters = snapshot
+                                .data!.docs
+                                .map((doc) => serializers.deserializeWith(
+                                        CharacterRecord.serializer, doc.data())
+                                    as CharacterRecord)
+                                .toList();
+
+                            return _buildCharacterList(characters);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 10, right: 20, top: 10),
-              child: CustomMainButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                height: 30,
-                buttonText: "Back",
+              Padding(
+                padding: EdgeInsets.only(left: 10, right: 20, top: 10),
+                child: CustomMainButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  height: 30,
+                  buttonText: "Back",
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
@@ -190,6 +189,17 @@ class _GameScreenState extends State<GameScreen> {
               },
             )
           : Container(),
+    );
+  }
+
+  Widget _buildCharacterList(List<CharacterRecord> characters) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: characters.length,
+      itemBuilder: (context, index) {
+        return buildCharacterCard(context, characters[index]);
+      },
     );
   }
 }

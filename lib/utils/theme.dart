@@ -40,7 +40,10 @@ class AppTypography {
 
   AppTypography._();
 
-  static TextStyle floatingButtonText(BuildContext context) => GoogleFonts.getFont(
+  static TextStyle characterCardText(BuildContext context) => gameCardText(context);
+
+  static TextStyle floatingButtonText(BuildContext context) =>
+      GoogleFonts.getFont(
         _defaultFontFamily,
         color: Theme.of(context)
             .colorScheme

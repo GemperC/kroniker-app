@@ -31,7 +31,12 @@ Widget buildCharacterCard(BuildContext context, CharacterRecord character) {
           //     ));
         },
         onLongPress: () {},
-        child: Text(character.name!),
+        child: Center(
+          child: Text(
+            character.name!,
+            style: AppTypography.characterCardText(context),
+          ),
+        ),
       ),
     ),
   );

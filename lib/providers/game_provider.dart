@@ -31,6 +31,13 @@ class GameProvider extends ChangeNotifier {
     }
   }
 
+  void updateGameSetting(String newSetting) {
+    if (_gameRecord != null) {
+      _gameRecord = _gameRecord!.rebuild((b) => b..setting = newSetting);
+      notifyListeners();
+    }
+  }
+
   void updateGameDescription(String newDescription) {
     if (_gameRecord != null) {
       _gameRecord =
@@ -42,6 +49,13 @@ class GameProvider extends ChangeNotifier {
   void updateGameTitle(String newGameTitle) {
     if (_gameRecord != null) {
       _gameRecord = _gameRecord!.rebuild((b) => b..gameTitle = newGameTitle);
+      notifyListeners();
+    }
+  }
+
+  void updateGameRules(String newRulesURL) {
+    if (_gameRecord != null) {
+      _gameRecord = _gameRecord!.rebuild((b) => b..rulesUrl = newRulesURL);
       notifyListeners();
     }
   }
