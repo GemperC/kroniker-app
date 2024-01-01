@@ -11,6 +11,9 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(GameRecord.serializer)
       ..add(UserRecord.serializer)
       ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(String)]),
+          () => new ListBuilder<String>())
+      ..addBuilderFactory(
           const FullType(BuiltList, const [
             const FullType(
                 DocumentReference, const [const FullType.nullable(Object)])

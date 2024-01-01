@@ -14,6 +14,8 @@ import 'package:koala/widgets/custom/button.dart';
 import 'package:koala/widgets/custom/textfield.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_collection/built_collection.dart';
 
 void onCreateGameTap(context) {
   final gameNameController = TextEditingController();
@@ -53,10 +55,15 @@ void createNewGame(String gameTitle) async {
   try {
     DateTime createdDate = DateTime.now();
     String gameMasterEmail = currentUserDocument!.email!;
+    BuiltList<String> userEmails = BuiltList<String>([
+      gameMasterEmail
+    ]); // Create a BuiltList containing the game master's email
+
     Map<String, dynamic> gameData = GameRecord().createGameRecordData(
       gameTitle: gameTitle,
       createdDate: createdDate,
       gameMasterEmail: gameMasterEmail,
+      userEmails: userEmails,
     );
 
     GameRecord().addNewGame(gameData);
@@ -79,5 +86,3 @@ void deleteGame(GameRecord game) {
 void onSettingsTap(context) {
   showSettingsDialog(context);
 }
-
-

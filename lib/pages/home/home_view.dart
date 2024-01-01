@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:koala/backend/auth/auth_util.dart';
+import 'package:koala/backend/auth/firebase_user_provider.dart';
 import 'package:koala/backend/records/game_record.dart';
 import 'package:koala/backend/records/serializers.dart';
 import 'package:koala/pages/game/game_view.dart';
@@ -22,6 +24,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    // Check if currentUserDocument is null
+    while (currentUserDocument == null) {}
+
+    // If currentUserDocument is not null, proceed with rendering StreamBuilder
     return Scaffold(
       body: SafeArea(
           child: Stack(
@@ -44,6 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   .map((doc) => serializers.deserializeWith(
                       GameRecord.serializer, doc.data()) as GameRecord)
                   .toList();
+
+
 
               return ListView.builder(
                 itemCount: games.length,

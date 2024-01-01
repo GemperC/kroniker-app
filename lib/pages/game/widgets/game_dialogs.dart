@@ -12,14 +12,108 @@ void showGMKitDialog(BuildContext context) {
     builder: (context) {
       return AlertDialog(
         title: Text("GM Kit"),
-        content: ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pop();
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
 
-            showAddCharacterDialog(context);
-          },
-          child: Text('Add Character'),
+                showAddCharacterDialog(context);
+              },
+              child: Text('Add Character'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+
+                showAddPlayerDialog(context);
+              },
+              child: Text('Players'),
+            ),
+          ],
         ),
+      );
+    },
+  );
+}
+
+void showAddPlayerDialog(BuildContext context) {
+  TextEditingController emailController = TextEditingController();
+  String gameId =
+      Provider.of<GameProvider>(context, listen: false).gameRecord.id!;
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text("Players"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 200,
+                  child: TextField(
+                    controller: emailController,
+                    decoration: InputDecoration(hintText: "Add Player's email"),
+                  ),
+                ),
+                TextButton(
+                  child: Text("Add"),
+                  onPressed: () async {
+                    String email = emailController.text.trim();
+                    final gameDoc = await FirebaseFirestore.instance
+                        .collection('games')
+                        .doc(gameId);
+                    await gameDoc.update({
+                      'userEmails': FieldValue.arrayUnion([email])
+                    });
+                    emailController.text = '';
+
+                    emailController.clear();
+                  },
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('games')
+                  .doc(gameId)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                if (!snapshot.hasData || snapshot.data!.data() == null) {
+                  return Center(child: Text("No data found."));
+                }
+                Map<String, dynamic> data =
+                    snapshot.data!.data() as Map<String, dynamic>;
+                List<dynamic> userEmails = data['userEmails'] ?? [];
+
+                if (data['userEmails'] == null) {
+                  return Center(child: Text("No players found."));
+                }
+
+                return Column(
+                  children:
+                      List<Widget>.from(userEmails.map((email) => Text(email))),
+                );
+              },
+            ),
+          ],
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: Text("Exit"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
       );
     },
   );

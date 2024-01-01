@@ -53,6 +53,16 @@ Future<void> uploadImage(BuildContext context, GameRecord game) async {
   }
 }
 
+void updateGamePlayers(
+    BuildContext context, GameRecord game, String newPlayer) async {
+  try {
+    // Update the Firestore document
+    await FirebaseFirestore.instance.collection('games').doc(game.id).update({
+      'userEmails': FieldValue.arrayUnion([newPlayer]),
+    });
+  } catch (e) {}
+}
+
 void updateGameTitle(
     BuildContext context, GameRecord game, String newGameTitle) async {
   try {

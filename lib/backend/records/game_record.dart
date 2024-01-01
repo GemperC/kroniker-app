@@ -16,7 +16,7 @@ abstract class GameRecord implements Built<GameRecord, GameRecordBuilder> {
   String? get bannerImageUrl;
   String? get description;
   String? get gameMasterEmail;
-  List<String>? get userEmails;
+  BuiltList<String>? get userEmails;
   BuiltList<DocumentReference>? get characters;
   String? get setting;
   String? get rulesUrl;
@@ -66,7 +66,7 @@ abstract class GameRecord implements Built<GameRecord, GameRecordBuilder> {
       ..bannerImageUrl = bannerImageUrl
       ..description = description
       ..gameMasterEmail = gameMasterEmail
-      ..userEmails = userEmails?.toList()
+      ..userEmails = userEmails?.toBuilder()
       ..characters = characters?.toBuilder()
       ..setting = setting
       ..rulesUrl = rulesUrl

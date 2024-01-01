@@ -67,7 +67,7 @@ class _$GameRecordSerializer implements StructuredSerializer<GameRecord> {
         ..add('userEmails')
         ..add(serializers.serialize(value,
             specifiedType:
-                const FullType(List, const [const FullType(String)])));
+                const FullType(BuiltList, const [const FullType(String)])));
     }
     value = object.characters;
     if (value != null) {
@@ -152,10 +152,10 @@ class _$GameRecordSerializer implements StructuredSerializer<GameRecord> {
               specifiedType: const FullType(String)) as String?;
           break;
         case 'userEmails':
-          result.userEmails = serializers.deserialize(value,
-                  specifiedType:
-                      const FullType(List, const [const FullType(String)]))
-              as List<String>?;
+          result.userEmails.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(String)]))!
+              as BuiltList<Object?>);
           break;
         case 'characters':
           result.characters.replace(serializers.deserialize(value,
@@ -207,7 +207,7 @@ class _$GameRecord extends GameRecord {
   @override
   final String? gameMasterEmail;
   @override
-  final List<String>? userEmails;
+  final BuiltList<String>? userEmails;
   @override
   final BuiltList<DocumentReference<Object?>>? characters;
   @override
@@ -330,9 +330,11 @@ class GameRecordBuilder implements Builder<GameRecord, GameRecordBuilder> {
   set gameMasterEmail(String? gameMasterEmail) =>
       _$this._gameMasterEmail = gameMasterEmail;
 
-  List<String>? _userEmails;
-  List<String>? get userEmails => _$this._userEmails;
-  set userEmails(List<String>? userEmails) => _$this._userEmails = userEmails;
+  ListBuilder<String>? _userEmails;
+  ListBuilder<String> get userEmails =>
+      _$this._userEmails ??= new ListBuilder<String>();
+  set userEmails(ListBuilder<String>? userEmails) =>
+      _$this._userEmails = userEmails;
 
   ListBuilder<DocumentReference<Object?>>? _characters;
   ListBuilder<DocumentReference<Object?>> get characters =>
@@ -371,7 +373,7 @@ class GameRecordBuilder implements Builder<GameRecord, GameRecordBuilder> {
       _bannerImageUrl = $v.bannerImageUrl;
       _description = $v.description;
       _gameMasterEmail = $v.gameMasterEmail;
-      _userEmails = $v.userEmails;
+      _userEmails = $v.userEmails?.toBuilder();
       _characters = $v.characters?.toBuilder();
       _setting = $v.setting;
       _rulesUrl = $v.rulesUrl;
@@ -407,7 +409,7 @@ class GameRecordBuilder implements Builder<GameRecord, GameRecordBuilder> {
               bannerImageUrl: bannerImageUrl,
               description: description,
               gameMasterEmail: gameMasterEmail,
-              userEmails: userEmails,
+              userEmails: _userEmails?.build(),
               characters: _characters?.build(),
               setting: setting,
               rulesUrl: rulesUrl,
@@ -416,6 +418,8 @@ class GameRecordBuilder implements Builder<GameRecord, GameRecordBuilder> {
     } catch (_) {
       late String _$failedField;
       try {
+        _$failedField = 'userEmails';
+        _userEmails?.build();
         _$failedField = 'characters';
         _characters?.build();
 

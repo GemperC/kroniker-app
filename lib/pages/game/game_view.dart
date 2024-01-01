@@ -144,7 +144,7 @@ class _GameScreenState extends State<GameScreen> {
                             }
 
                             if (!snapshot.hasData) {
-                              return Center(child: Text("No games available."));
+                              return Center(child: Text("No Characters available."));
                             }
 
                             List<CharacterRecord> characters = snapshot
